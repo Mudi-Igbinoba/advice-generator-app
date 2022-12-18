@@ -37,8 +37,10 @@ main {
     max-width: 500px;
     margin: 0 auto;
     border-radius: 15px;
+    padding: 0 2em 0 2em;
     padding-top: 30px;
     padding-bottom: 55px;
+
     box-shadow: 0px 15px 5px 0px hsl(218, 23%, 16%);
 }
 
@@ -72,8 +74,14 @@ h2 {
     cursor: pointer;
 }
 
-#generateAdviceBtn:hover {
+#generateAdviceBtn:hover,
+#generateAdviceBtn:focus,
+#generateAdviceBtn:active {
     box-shadow: 0px 0px 50px 0px hsl(150, 100%, 66%);
+}
+
+#loader {
+    width: 25%;
 }
 
 /* Footer */

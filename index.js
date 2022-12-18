@@ -3,42 +3,39 @@
 //create a promise to generate a random advice
 //attach a click event listener to the button
 
-let adviceID;
-let adviceText;
-
 const adviceNum = document.querySelector('h2');
 const advice = document.querySelector('#advice');
+const dice = document.getElementById('diceImg');
 const generateAdviceBtn = document.querySelector('#generateAdviceBtn');
 
-// console.log(adviceNum, advice, generateAdviceBtn);
+const getRandomAdvice = () => {
+    fetch('https://api.adviceslip.com/advice')
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(`Can't find any advice`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            advice.innerHTML = `
+                <img id='loader' src='images/dice-loader.gif' alt='Loader Gif'/>
+            `;
 
-const getRandomAdvice = async () => {
-    let response = await fetch('https://api.adviceslip.com/advice');
-
-    if (response.status !== 200) {
-        throw new Error(`'Cannot find advice' ${response.status}`);
-    }
-
-    let data = await response.json();
-
-    return data;
-};
-
-const random = () => {
-    getRandomAdvice()
-        // .then((data) => {
-        //     adviceID = data.slip.id;
-        //     adviceText = data.slip.advice;
-        //     adviceNum.textContent = `Advice #${adviceID}`;
-        //     advice.textContent = `"${adviceText}"`;
-        // })
+            setTimeout(() => {
+                adviceNum.textContent = `Advice #${data.slip.id}`;
+                advice.innerHTML = `"${data.slip.advice}"`;
+            }, 2000);
+        })
         .catch((err) => {
-            console.log(err);
-            adviceID = '';
-            adviceText = err;
-            adviceNum.textContent = `Advice #${adviceID}`;
-            advice.textContent = `"${adviceText}"`;
+            advice.innerHTML = `
+                <img id='loader' src='images/dice-loader.gif' alt='Loader Gif'/>
+            `;
+
+            setTimeout(() => {
+                adviceNum.textContent = `Advice #`;
+                advice.innerHTML = `Can't find any advice! Try again later!`;
+            }, 2000);
         });
 };
 
-generateAdviceBtn.addEventListener('click', random);
+generateAdviceBtn.addEventListener('click', getRandomAdvice);
